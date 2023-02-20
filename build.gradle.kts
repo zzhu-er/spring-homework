@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+	implementation ("com.google.code.gson:gson:2.10.1")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

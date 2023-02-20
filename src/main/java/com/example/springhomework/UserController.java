@@ -10,8 +10,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private List<User> data = Collections.emptyList();
+
     @GetMapping
     public List<User> getAll() {
-        return Collections.emptyList();
+        return data;
+    }
+
+    public void save(List<User> data) {
+        this.data = data;
+    }
+
+    public void deleteAll() {
+        this.data = Collections.emptyList();
     }
 }
