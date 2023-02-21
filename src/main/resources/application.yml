@@ -1,0 +1,14 @@
+#spring.datasource.url=jdbc:postgresql://localhost:5432/matrimony
+#spring.datasource.username=myuser
+#spring.datasource.password=password
+#
+#spring.jpa.show-sql=true
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.properties.hibernate.format_sql=true
+
+spring:
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: true

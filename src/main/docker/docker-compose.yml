@@ -22,6 +22,8 @@ services:
       - POSTGRES_PASSWORD=compose-postgres
     volumes:
       - homework-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
 volumes:
   homework-postgres-data:
