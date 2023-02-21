@@ -21,7 +21,9 @@ repositories {
 dependencies {
 	implementation ("com.google.code.gson:gson:2.10.1")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.8")
 	compileOnly("org.projectlombok:lombok")
+	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
