@@ -5,7 +5,7 @@ spring:
     baseline-on-migrate: true
 
   datasource:
-    url: jdbc:postgresql://db:5432/compose-postgres
+    url: jdbc:postgresql://localhost:5433/compose-postgres
     username: compose-postgres
     password: compose-postgres
   jpa:

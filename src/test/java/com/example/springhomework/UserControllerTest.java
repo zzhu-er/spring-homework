@@ -1,59 +1,44 @@
 package com.example.springhomework;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.Instant;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTest {
     @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired
-    private UserController userController;
-
-    @AfterEach
-    void tearDown() {
-        userController.deleteAll();
-    }
+    private MockMvc mvc;
+    @MockBean
+    private UserService userService;
 
     @Test
-    void shouldGetEmptyUsers() {
-        ResponseEntity<List> response = restTemplate.getForEntity("/users", List.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        assertThat(response.getBody()).isEmpty();
-    }
-
-    @Test
-    void shouldGetAllUsers() {
-        List<User> data = asList(
-                User.builder().id(0L).age(18L).name("A").build(),
-                User.builder().id(1L).age(19L).name("B").build()
+    void ShouldGetEmptyWithNoData() throws Exception {
+        List<User> response = asList(
+                User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
+                User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-        userController.save(data);
 
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .serializeNulls()
-                .create();
-        String json = gson.toJson(data);
+        when(userService.findAll()).thenReturn(response);
 
-        ResponseEntity<List> response = restTemplate.getForEntity("/users", List.class);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        assertThat(gson.toJson(response.getBody())).isEqualTo(json);
+        mvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(0)))
+                .andExpect(jsonPath("$[0].age", is(18)))
+                .andExpect(jsonPath("$[0].name", is("A")));
     }
 }

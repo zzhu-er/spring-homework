@@ -6,6 +6,8 @@ services:
     container_name: app
     depends_on:
       - db
+    profiles:
+      - main
   
   db:
     image: 'postgres:14.7-alpine3.17'
