@@ -12,7 +12,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -50,5 +50,14 @@ public class UserServiceTest {
         assertEquals(19, allUsers.get(1).getAge());
         assertEquals("A", allUsers.get(0).getName());
         assertEquals("B", allUsers.get(1).getName());
+    }
+
+    @Test
+    void ShouldSaveSuccessfully() {
+        User savedUser = User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build();
+
+        userService.save(savedUser);
+
+        verify(userRepository, times(1)).save(any());
     }
 }
