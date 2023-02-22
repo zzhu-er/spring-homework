@@ -27,7 +27,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    void ShouldGetEmptyWithNoData() throws Exception {
+    void ShouldGetAllUsers() throws Exception {
         List<User> response = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
@@ -41,4 +41,5 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].age", is(18)))
                 .andExpect(jsonPath("$[0].name", is("A")));
     }
+
 }
