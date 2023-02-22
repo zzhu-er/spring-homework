@@ -1,5 +1,7 @@
 package com.example.springhomework;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,5 +52,18 @@ public class UserControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().string("[]"));
+    }
+
+    @Test
+    void ShouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
+        User savedUser = User.builder().name("A").age(18L).build();
+
+        doNothing().when(userService).save(savedUser);
+
+        mvc.perform(MockMvcRequestBuilders.post("/users").
+                content(new ObjectMapper().writeValueAsString(savedUser)).
+                contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").value("USER SAVED SUCCESSFULLY"));
     }
 }

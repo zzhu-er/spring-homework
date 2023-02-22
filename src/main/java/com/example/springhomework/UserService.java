@@ -10,4 +10,8 @@ public class UserService {
     public List<User> findAll() {
         return Collections.emptyList();
     }
+
+    public void save(User savedUser) {
+
+    }
 }
