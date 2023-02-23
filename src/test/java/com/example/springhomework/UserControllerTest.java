@@ -56,7 +56,10 @@ public class UserControllerTest {
 
     @Test
     void ShouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
-        User savedUser = User.builder().name("A").age(18L).build();
+//        User savedUser = User.builder().name("A").age(18L).build();
+        User savedUser = new User();
+        savedUser.setName("A");
+        savedUser.setAge(18L);
 
         doNothing().when(userService).save(savedUser);
 
@@ -66,4 +69,5 @@ public class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").value("USER SAVED SUCCESSFULLY"));
     }
+
 }
