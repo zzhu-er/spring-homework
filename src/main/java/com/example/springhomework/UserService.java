@@ -19,4 +19,12 @@ public class UserService {
     public void save(User savedUser) {
         userRepository.save(savedUser);
     }
+
+    public void delete(User deletedUser) {
+        userRepository.delete(deletedUser);
+    }
+
+    public void update(User refEq) {
+
+    }
 }

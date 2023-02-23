@@ -60,4 +60,14 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).save(any());
     }
+
+    @Test
+    void ShouldCallDeleteMethodOnce() {
+        User deletedUser = User.builder().id(1L).build();
+        doNothing().when(userRepository).delete(deletedUser);
+
+        userService.delete(deletedUser);
+
+        verify(userRepository, times(1)).delete(any());
+    }
 }

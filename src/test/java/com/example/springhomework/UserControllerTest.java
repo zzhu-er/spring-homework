@@ -17,8 +17,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -69,5 +68,29 @@ public class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").value("USER SAVED SUCCESSFULLY"));
     }
+    @Test
+    void ShouldGetSuccessWhenOneUserDeleted() throws Exception {
+        User deletedUser = new User();
+        deletedUser.setId(1L);
 
+        mvc.perform(MockMvcRequestBuilders.delete("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("USER DELETED SUCCESSFULLY"));
+
+        verify(userService, times(1)).delete(refEq(deletedUser));
+    }
+
+//    @Test
+//    void ShouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
+//        User updatedUser = User.builder().id(1L).name("UPDATE").age(100L).build();
+//
+//        doNothing().when(userService).update(refEq(updatedUser));
+//
+//        mvc.perform(MockMvcRequestBuilders.put("/users/1")
+//                    .content(new ObjectMapper().writeValueAsString(updatedUser))
+//                    .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("USER UPDATED SUCCESSFULLY"));
+//    }
 }

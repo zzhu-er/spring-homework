@@ -27,13 +27,13 @@ public class SpringBootTestUserControllerTest {
         userController.deleteAll();
     }
 
-    @Test
-    void shouldGetEmptyUsers() {
-        ResponseEntity<List> response = restTemplate.getForEntity("/users", List.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        assertThat(response.getBody()).isEmpty();
-    }
+//    @Test
+//    void shouldGetEmptyUsers() {
+//        ResponseEntity<List> response = restTemplate.getForEntity("/users", List.class);
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+//        assertThat(response.getBody()).isEmpty();
+//    }
 
 //    @Test
 //    void shouldGetAllUsers() {

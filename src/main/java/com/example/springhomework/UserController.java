@@ -26,6 +26,13 @@ public class UserController {
         return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        User deletedUser = User.builder().id(id).build();
+        userService.delete(deletedUser);
+        return new ResponseEntity<>("USER DELETED SUCCESSFULLY", HttpStatus.OK);
+    }
+
     public void deleteAll() {
         this.data = Collections.emptyList();
     }
