@@ -33,6 +33,13 @@ public class UserController {
         return new ResponseEntity<>("USER DELETED SUCCESSFULLY", HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody User updatedUser) throws Exception {
+        updatedUser.setId(id);
+        userService.update(updatedUser);
+        return new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK);
+    }
+
     public void deleteAll() {
         this.data = Collections.emptyList();
     }

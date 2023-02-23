@@ -81,16 +81,16 @@ public class UserControllerTest {
         verify(userService, times(1)).delete(refEq(deletedUser));
     }
 
-//    @Test
-//    void ShouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
-//        User updatedUser = User.builder().id(1L).name("UPDATE").age(100L).build();
-//
-//        doNothing().when(userService).update(refEq(updatedUser));
-//
-//        mvc.perform(MockMvcRequestBuilders.put("/users/1")
-//                    .content(new ObjectMapper().writeValueAsString(updatedUser))
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("USER UPDATED SUCCESSFULLY"));
-//    }
+    @Test
+    void ShouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
+        User updatedUser = User.builder().name("UPDATE").age(100L).build();
+
+        doNothing().when(userService).update(refEq(updatedUser));
+
+        mvc.perform(MockMvcRequestBuilders.put("/users/1")
+                    .content(new ObjectMapper().writeValueAsString(updatedUser))
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("USER UPDATED SUCCESSFULLY"));
+    }
 }

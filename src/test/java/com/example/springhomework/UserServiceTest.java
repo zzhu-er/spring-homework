@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,5 +70,16 @@ public class UserServiceTest {
         userService.delete(deletedUser);
 
         verify(userRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void ShouldUpdateUserSuccessfully() throws Exception {
+        User updatedUser = User.builder().id(1L).name("UPDATE").age(100L).build();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(updatedUser));
+
+        userService.update(updatedUser);
+
+        verify(userRepository, times(1)).save(any());
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +25,14 @@ public class UserService {
         userRepository.delete(deletedUser);
     }
 
-    public void update(User refEq) {
-
+    public void update(User updatedUser) throws Exception {
+        User savedUser = userRepository.findById(updatedUser.getId()).orElse(null);
+        if (savedUser != null) {
+            savedUser.setName(updatedUser.getName());
+            savedUser.setAge(updatedUser.getAge());
+            userRepository.save(updatedUser);
+        } else {
+            throw new Exception("USER NOT FOUND");
+        }
     }
 }

@@ -28,6 +28,7 @@ public class User {
     @Column(nullable = false)
     private Long age;
     @CreatedDate
+    @Column(updatable = false)
     private Instant createdAt;
     @LastModifiedDate
     private Instant updatedAt;
