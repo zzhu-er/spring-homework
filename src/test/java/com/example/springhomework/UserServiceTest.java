@@ -25,7 +25,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    void ShouldReturnEmptyListWhenNoData() {
+    void shouldReturnEmptyListWhenNoData() {
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
         List<User> allUsers = userService.findAll();
@@ -35,7 +35,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void ShouldReturnAllUsers() {
+    void shouldReturnAllUsers() {
         List<User> mockedUsers = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
@@ -56,7 +56,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void ShouldSaveSuccessfully() {
+    void shouldSaveSuccessfully() {
         User savedUser = User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build();
 
         userService.save(savedUser);
@@ -65,7 +65,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void ShouldCallDeleteMethodOnce() {
+    void shouldCallDeleteMethodOnce() {
         User deletedUser = User.builder().id(1L).build();
         doNothing().when(userRepository).delete(deletedUser);
 
@@ -75,7 +75,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void ShouldUpdateUserSuccessfully() throws Exception {
+    void shouldUpdateUserSuccessfully() throws Exception {
         User updatedUser = User.builder().id(1L).name("UPDATE").age(100L).build();
 
         when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(updatedUser));

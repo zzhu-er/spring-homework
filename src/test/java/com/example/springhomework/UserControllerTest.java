@@ -31,7 +31,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    void ShouldGetAllUsers() throws Exception {
+    void shouldGetAllUsers() throws Exception {
         List<User> response = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
@@ -47,7 +47,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void ShouldGetEmptyWhenNoData() throws Exception {
+    void shouldGetEmptyWhenNoData() throws Exception {
         when(userService.findAll()).thenReturn(Collections.emptyList());
 
         mvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -56,7 +56,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void ShouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
+    void shouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
 //        User savedUser = User.builder().name("A").age(18L).build();
         User savedUser = new User();
         savedUser.setName("A");
@@ -71,7 +71,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$").value("USER SAVED SUCCESSFULLY"));
     }
     @Test
-    void ShouldGetSuccessWhenOneUserDeleted() throws Exception {
+    void shouldGetSuccessWhenOneUserDeleted() throws Exception {
         User deletedUser = new User();
         deletedUser.setId(1L);
 
@@ -84,7 +84,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void ShouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
+    void shouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
         User updatedUser = User.builder().name("UPDATE").age(100L).build();
 
         doNothing().when(userService).update(refEq(updatedUser));
