@@ -19,6 +19,7 @@
 * 创建用户时，id、createdAt 和 updatedAt需要自动生成 ✅
 * 需要实现分页查询功能 ✅
 * 使用Nginx转发请求 ✅
+* 创建第二个REST API（Email API），它根据 User 的ID，返回其邮箱地址。规则：如果id为 12345，那么邮箱地址为 12345@rest.local，即添加后缀即可。
 
 ## Docker Requirements
 
