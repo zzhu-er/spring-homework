@@ -15,7 +15,7 @@
 * 使用Docker搭建本地运行环境, 本地Docker运行环境中使用不同profile ✅
 * 使用Junit5和Mockito编写单元测试，使用jacoco进行测试覆盖率检查 ✅ 
 * 除配置类外测试覆盖率100% <span style="color:red">(TBD)</span>
-* 需要实现动态查询，比如根据姓名和年龄或者创建时间区间进行查询 <span style="color:red">(TBD)</span>
+* 需要实现动态查询，比如根据姓名和年龄或者创建时间区间进行查询 ✅
 * 创建用户时，id、createdAt 和 updatedAt需要自动生成 ✅
 * 需要实现分页查询功能 ✅
 * 使用Nginx转发请求 ✅

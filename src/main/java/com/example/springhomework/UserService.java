@@ -16,14 +16,24 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
     public List<User> findAll(int page, int size) {
         Pageable firstPageWithThreeItems = PageRequest.of(page, size);
         Page<User> allUsers = userRepository.findAll(firstPageWithThreeItems);
         return allUsers.getContent();
     }
 
-    public List<User> findAllByAge(Long age) {
-        return userRepository.findAllByAge(age);
+    public List<User> findByAge(Long age) {
+        return userRepository.findByAge(age);
+    }
+
+    public List<User> findByAge(Integer page, Integer size, Long age) {
+        Pageable pagination = PageRequest.of(page, size);
+        Page<User> allUsers = userRepository.findByAge(pagination, age);
+        return allUsers.getContent();
     }
 
     public void save(User savedUser) {
@@ -43,5 +53,15 @@ public class UserService {
         } else {
             throw new Exception("USER NOT FOUND");
         }
+    }
+
+    public List<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    public List<User> findByName(Integer page, Integer size, String name) {
+        Pageable pagination = PageRequest.of(page, size);
+        Page<User> allUsers = userRepository.findByName(pagination, name);
+        return allUsers.getContent();
     }
 }

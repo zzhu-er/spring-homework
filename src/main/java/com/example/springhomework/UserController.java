@@ -15,15 +15,28 @@ public class UserController {
     private List<User> data = Collections.emptyList();
     private UserService userService;
 
-    @GetMapping("/{page}/{size}")
-    public List<User> getAll(@PathVariable Integer page, @PathVariable int size) {
-
+    @GetMapping
+    public List<User> getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        if (page == null || size == null) {
+            return userService.findAll();
+        }
         return userService.findAll(page, size);
     }
 
-    @GetMapping("/{age}")
-    public List<User> getAll(@PathVariable Long age) {
-        return userService.findAllByAge(age);
+    @GetMapping(value = "/", params = "age")
+    public List<User> getAllByAge(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam Long age) {
+        if (page == null || size == null) {
+            return userService.findByAge(age);
+        }
+        return userService.findByAge(page, size, age);
+    }
+
+    @GetMapping(value = "/", params = "name")
+    public List<User> getAllByName(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam String name) {
+        if (page == null || size == null) {
+            return userService.findByName(name);
+        }
+        return userService.findByName(page, size, name);
     }
 
     @PostMapping
