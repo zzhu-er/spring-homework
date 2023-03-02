@@ -13,10 +13,11 @@
 * 创建REST API（User API），实现对User的CRUD。User对象需要包含以下属性：id, name, age, createdAt, updatedAt等 ✅
 * 使用 PostgreSQL (docker) 进行数据持久化，使用 Flyway 进行数据库版本控制 ✅
 * 使用Docker搭建本地运行环境, 本地Docker运行环境中使用不同profile ✅
-* 使用Junit5和Mockito编写单元测试，除配置类外测试覆盖率100%。使用jacoco进行测试覆盖率检查 ✅/❎ <span style="color:red">(TBD)</span>
+* 使用Junit5和Mockito编写单元测试，使用jacoco进行测试覆盖率检查 ✅ 
+* 除配置类外测试覆盖率100% <span style="color:red">(TBD)</span>
 * 需要实现动态查询，比如根据姓名和年龄或者创建时间区间进行查询 <span style="color:red">(TBD)</span>
 * 创建用户时，id、createdAt 和 updatedAt需要自动生成 ✅
-* 需要实现分页查询功能 <span style="color:red">(TBD)</span>
+* 需要实现分页查询功能 ✅
 * 使用Nginx转发请求 ✅
 
 ## Docker Requirements

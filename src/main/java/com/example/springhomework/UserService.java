@@ -22,6 +22,10 @@ public class UserService {
         return allUsers.getContent();
     }
 
+    public List<User> findAllByAge(Long age) {
+        return userRepository.findAllByAge(age);
+    }
+
     public void save(User savedUser) {
         userRepository.save(savedUser);
     }

@@ -21,6 +21,11 @@ public class UserController {
         return userService.findAll(page, size);
     }
 
+    @GetMapping("/{age}")
+    public List<User> getAll(@PathVariable Long age) {
+        return userService.findAllByAge(age);
+    }
+
     @PostMapping
     public ResponseEntity<String> save(@RequestBody User savedUser) {
         userService.save(savedUser);
