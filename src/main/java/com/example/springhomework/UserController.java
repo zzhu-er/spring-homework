@@ -1,10 +1,12 @@
 package com.example.springhomework;
 
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,6 +39,14 @@ public class UserController {
             return userService.findByName(name);
         }
         return userService.findByName(page, size, name);
+    }
+
+    @GetMapping(value = "/", params = {"from", "to"})
+    public List<User> getAllByTime(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant startDate, @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant endDate) {
+        if (page == null || size == null) {
+            return userService.findAllBetweenDates(startDate, endDate);
+        }
+        return userService.findAllBetweenDates(page, size, startDate, endDate);
     }
 
     @PostMapping

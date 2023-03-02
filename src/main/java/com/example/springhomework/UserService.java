@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,16 @@ public class UserService {
     public List<User> findByName(Integer page, Integer size, String name) {
         Pageable pagination = PageRequest.of(page, size);
         Page<User> allUsers = userRepository.findByName(pagination, name);
+        return allUsers.getContent();
+    }
+
+    public List<User> findAllBetweenDates(Instant startDate, Instant endDate) {
+        return userRepository.findByCreatedAtBetween(startDate, endDate);
+    }
+
+    public List<User> findAllBetweenDates(Integer page, Integer size, Instant startDate, Instant endDate) {
+        Pageable pagination = PageRequest.of(page, size);
+        Page<User> allUsers = userRepository.findByCreatedAtBetween(pagination, startDate, endDate);
         return allUsers.getContent();
     }
 }

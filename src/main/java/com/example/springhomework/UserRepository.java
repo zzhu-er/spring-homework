@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User,Long> {
@@ -18,4 +19,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findByName(String name);
 
     Page<User> findByName(Pageable pageRequest, String name);
+
+    @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
+    List<User> findByCreatedAtBetween(Instant startDate, Instant endDate);
+
+    @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
+    Page<User> findByCreatedAtBetween(Pageable pageRequest, Instant startDate, Instant endDate);
 }
