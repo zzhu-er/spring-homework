@@ -2,6 +2,9 @@ package com.example.springhomework;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -13,8 +16,10 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll(int page, int size) {
+        Pageable firstPageWithThreeItems = PageRequest.of(page, size);
+        Page<User> allUsers = userRepository.findAll(firstPageWithThreeItems);
+        return allUsers.getContent();
     }
 
     public void save(User savedUser) {

@@ -15,9 +15,10 @@ public class UserController {
     private List<User> data = Collections.emptyList();
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAll() {
-        return userService.findAll();
+    @GetMapping("/{page}/{size}")
+    public List<User> getAll(@PathVariable Integer page, @PathVariable int size) {
+
+        return userService.findAll(page, size);
     }
 
     @PostMapping
