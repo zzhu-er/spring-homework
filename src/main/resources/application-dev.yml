@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/compose-postgres
-    username: compose-postgres
-    password: compose-postgres
+    url: jdbc:postgresql://localhost:5433/homework_user
+    username: user
+    password: pass
