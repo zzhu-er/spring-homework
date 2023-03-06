@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.8")
 	implementation("org.flywaydb:flyway-core:8.5.11")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.3")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
