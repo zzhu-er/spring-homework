@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Email {
     private Long id;
+    private Long userId = 0L;
     private String email;
 }
