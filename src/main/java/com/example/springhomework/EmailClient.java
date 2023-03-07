@@ -13,6 +13,6 @@ import java.util.List;
 public interface EmailClient {
     @GetMapping("/{id}")
     List<Email> getById(@PathVariable Long id);
-    @PostMapping
-    ResponseEntity<String> saveEmail(@RequestBody List<Email> savedEmails);
+    @PostMapping("/{userId}")
+    ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails);
 }

@@ -14,12 +14,12 @@ public class EmailController {
     private EmailClient emailClient;
 
     @GetMapping("/{id}")
-    public List<Email> getById(@PathVariable Long id) {
+    public List<Email> getByUserId(@PathVariable Long id) {
         return emailClient.getById(id);
     }
-    @PostMapping
-    public ResponseEntity<String> save(@RequestBody List<Email> savedEmails) {
-        return emailClient.saveEmail(savedEmails);
-    }
+//    @PostMapping
+//    public ResponseEntity<String> save(@RequestBody List<Email> savedEmails) {
+//        return emailClient.saveEmail(savedEmails);
+//    }
 }
 

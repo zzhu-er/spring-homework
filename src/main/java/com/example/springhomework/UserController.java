@@ -16,6 +16,7 @@ import java.util.List;
 public class UserController {
     private List<User> data = Collections.emptyList();
     private UserService userService;
+    private EmailClient emailClient;
 
     @GetMapping
     public List<User> getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
@@ -50,8 +51,11 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody User savedUser) {
+    public ResponseEntity<String> save(@RequestBody UserRequest userRequest) {
+        User savedUser = User.builder().name(userRequest.getName()).age(userRequest.getAge()).build();
+        List<Email> savedEmails = userRequest.getEmails();
         userService.save(savedUser);
+        emailClient.saveEmail(savedUser.getId(), savedEmails);
         return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
     }
 
