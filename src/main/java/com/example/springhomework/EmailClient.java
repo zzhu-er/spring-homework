@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(value = "emailservice", url = "http://localhost:8081/emails", configuration = FeignConfig.class)
+@FeignClient(value = "emailservice",
+        url = "http://localhost:8081/emails",
+        configuration = FeignConfig.class,
+        fallback = EmailFallback.class)
 public interface EmailClient {
     @GetMapping("/{id}")
-    List<Email> getById(@PathVariable Long id);
+    List<Email> getById(@PathVariable Long id) throws Exception;
     @PostMapping("/{userId}")
-    ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails);
+    ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails) throws Exception;
 }

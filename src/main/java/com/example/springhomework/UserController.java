@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -50,8 +51,9 @@ public class UserController {
         return userService.findAllBetweenDates(page, size, startDate, endDate);
     }
 
+    @Transactional
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<String> save(@RequestBody UserRequest userRequest) throws Exception {
         User savedUser = User.builder().name(userRequest.getName()).age(userRequest.getAge()).build();
         List<Email> savedEmails = userRequest.getEmails();
         userService.save(savedUser);

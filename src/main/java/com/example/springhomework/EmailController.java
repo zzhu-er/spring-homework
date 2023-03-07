@@ -14,7 +14,7 @@ public class EmailController {
     private EmailClient emailClient;
 
     @GetMapping("/{id}")
-    public List<Email> getByUserId(@PathVariable Long id) {
+    public List<Email> getByUserId(@PathVariable Long id) throws Exception {
         return emailClient.getById(id);
     }
 //    @PostMapping
