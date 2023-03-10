@@ -17,9 +17,5 @@ public class EmailController {
     public List<Email> getByUserId(@PathVariable Long id) throws Exception {
         return emailClient.getById(id);
     }
-//    @PostMapping
-//    public ResponseEntity<String> save(@RequestBody List<Email> savedEmails) {
-//        return emailClient.saveEmail(savedEmails);
-//    }
 }
 

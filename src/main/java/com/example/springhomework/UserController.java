@@ -8,14 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
-    private List<User> data = Collections.emptyList();
     private UserService userService;
     private EmailClient emailClient;
 
@@ -73,9 +71,5 @@ public class UserController {
         updatedUser.setId(id);
         userService.update(updatedUser);
         return new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK);
-    }
-
-    public void deleteAll() {
-        this.data = Collections.emptyList();
     }
 }

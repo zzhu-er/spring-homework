@@ -1,16 +1,13 @@
 package com.example.springhomework;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -45,15 +42,12 @@ public class UserService {
         userRepository.delete(deletedUser);
     }
 
-    public void update(User updatedUser) throws Exception {
+    public void update(User updatedUser) {
         User savedUser = userRepository.findById(updatedUser.getId()).orElse(null);
-        if (savedUser != null) {
-            savedUser.setName(updatedUser.getName());
-            savedUser.setAge(updatedUser.getAge());
-            userRepository.save(updatedUser);
-        } else {
-            throw new Exception("USER NOT FOUND");
-        }
+
+        savedUser.setName(updatedUser.getName());
+        savedUser.setAge(updatedUser.getAge());
+        userRepository.save(updatedUser);
     }
 
     public List<User> findByName(String name) {
