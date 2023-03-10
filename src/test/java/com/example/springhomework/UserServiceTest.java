@@ -1,7 +1,6 @@
 package com.example.springhomework;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,11 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
