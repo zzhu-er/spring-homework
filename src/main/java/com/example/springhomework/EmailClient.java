@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @FeignClient(value = "emailservice",
-        url = "http://localhost:8081/emails",
+        url = "${service.endpoints.email}",
         configuration = FeignConfig.class,
         fallback = EmailFallback.class)
 public interface EmailClient {

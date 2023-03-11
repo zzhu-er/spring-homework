@@ -1,3 +1,7 @@
+service:
+  endpoints:
+    email: http://app:8081/emails
+
 spring:
   flyway:
     enabled: true

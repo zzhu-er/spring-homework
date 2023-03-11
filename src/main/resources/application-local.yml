@@ -1,3 +1,7 @@
+service:
+  endpoints:
+    email: http://localhost:8081/emails
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/homework_user
