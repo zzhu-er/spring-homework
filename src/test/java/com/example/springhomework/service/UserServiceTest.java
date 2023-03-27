@@ -1,5 +1,8 @@
-package com.example.springhomework;
+package com.example.springhomework.service;
 
+import com.example.springhomework.model.User;
+import com.example.springhomework.repository.UserRepository;
+import com.example.springhomework.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;

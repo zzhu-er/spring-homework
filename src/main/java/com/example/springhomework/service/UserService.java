@@ -1,5 +1,7 @@
-package com.example.springhomework;
+package com.example.springhomework.service;
 
+import com.example.springhomework.model.User;
+import com.example.springhomework.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

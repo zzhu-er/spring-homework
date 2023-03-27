@@ -1,5 +1,10 @@
-package com.example.springhomework;
+package com.example.springhomework.controller;
 
+import com.example.springhomework.model.User;
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.UserRequest;
+import com.example.springhomework.service.EmailClient;
+import com.example.springhomework.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

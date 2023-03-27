@@ -4,6 +4,6 @@ service:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/homework_user
-    username: user
+    url: jdbc:postgresql://localhost:5432/homework_user
+    username: homework
     password: pass

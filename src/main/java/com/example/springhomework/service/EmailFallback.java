@@ -1,6 +1,7 @@
-package com.example.springhomework;
+package com.example.springhomework.service;
 
-import org.springframework.http.HttpStatus;
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.service.EmailClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.status;
 
 @Component
-public class EmailFallback implements EmailClient{
+public class EmailFallback implements EmailClient {
 
     @Override
     public List<Email> getById(Long id){

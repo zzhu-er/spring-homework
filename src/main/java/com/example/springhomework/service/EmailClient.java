@@ -1,5 +1,7 @@
-package com.example.springhomework;
+package com.example.springhomework.service;
 
+import com.example.springhomework.configuration.FeignConfig;
+import com.example.springhomework.dto.Email;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

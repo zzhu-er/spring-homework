@@ -1,7 +1,16 @@
-package com.example.springhomework;
+package com.example.springhomework.controller;
 
+import com.example.springhomework.controller.UserController;
+import com.example.springhomework.model.User;
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.UserRequest;
+import com.example.springhomework.service.EmailClient;
+import com.example.springhomework.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +34,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

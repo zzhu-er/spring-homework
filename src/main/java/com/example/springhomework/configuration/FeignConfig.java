@@ -1,4 +1,4 @@
-package com.example.springhomework;
+package com.example.springhomework.configuration;
 
 import feign.Logger;
 import feign.auth.BasicAuthRequestInterceptor;

@@ -1,7 +1,8 @@
-package com.example.springhomework;
+package com.example.springhomework.controller;
 
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.service.EmailClient;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

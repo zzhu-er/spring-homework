@@ -1,5 +1,7 @@
-package com.example.springhomework;
+package com.example.springhomework.service;
 
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.service.EmailFallback;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
