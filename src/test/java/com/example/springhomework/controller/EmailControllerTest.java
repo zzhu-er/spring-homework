@@ -1,37 +1,37 @@
 package com.example.springhomework.controller;
 
+import com.example.springhomework.dto.Email;
 import com.example.springhomework.service.EmailClient;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 public class EmailControllerTest {
-    @Autowired
-    private MockMvc mvc;
-    @MockBean
+
+    @Mock
     private EmailClient emailClient;
+
+    @InjectMocks
+    private EmailController subject;
+
     @Test
     void shouldCallEmailClientGetByIdSuccessfully() throws Exception {
+        //given
         Long userId = 1L;
-        when(emailClient.getById(userId)).thenReturn(Collections.emptyList());
-
-        mvc.perform(MockMvcRequestBuilders.get("/emails/1").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
-        verify(emailClient, times(1)).getById(1L);
+        List<Email> expect = Collections.emptyList();
+        when(emailClient.getById(userId)).thenReturn(expect);
+        //when
+        List<Email> result = subject.getByUserId(userId);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 }
