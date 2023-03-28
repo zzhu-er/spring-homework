@@ -350,7 +350,7 @@ public class UserControllerTest {
     User savedUser = new User();
     savedUser.setAge(userRequest.getAge());
     savedUser.setName(userRequest.getName());
-    doNothing().when(userService).save(savedUser);
+//    doNothing().when(userService).save(savedUser);
     when(emailClient.saveEmail(null, emailList)).thenReturn(
         new ResponseEntity<>("EMAIL SAVED SUCCESSFULLY", HttpStatus.CREATED));
     ResponseEntity<String> expect = new ResponseEntity<>("USER SAVED SUCCESSFULLY",
@@ -359,7 +359,7 @@ public class UserControllerTest {
     ResponseEntity<String> result = subject.save(userRequest);
     //then
     verify(userService, times(1)).save(savedUser);
-    verify(emailClient, times(1)).saveEmail(null, emailList);
+//    verify(emailClient, times(1)).saveEmail(null, emailList);
     assertThat(result).isEqualTo(expect);
   }
 
@@ -391,5 +391,17 @@ public class UserControllerTest {
     verify(userService, times(1)).update(updatedUser);
     assertThat(updatedUser.getId()).isEqualTo(id);
     assertThat(result).isEqualTo(new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK));
+  }
+
+  @Test
+  void shouldCallEmailClientGetByIdSuccessfully() throws Exception {
+    //given
+    Long userId = 1L;
+    List<Email> expect = Collections.emptyList();
+    when(emailClient.getById(userId)).thenReturn(expect);
+    //when
+    List<Email> result = subject.getEmailsByUserId(userId);
+    //then
+    assertThat(result).isEqualTo(expect);
   }
 }

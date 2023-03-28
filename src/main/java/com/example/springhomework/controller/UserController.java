@@ -85,4 +85,9 @@ public class UserController {
     userService.update(updatedUser);
     return new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK);
   }
+
+  @GetMapping("/{id}/emails")
+  public List<Email> getEmailsByUserId(@PathVariable Long id) throws Exception {
+    return emailClient.getById(id);
+  }
 }
