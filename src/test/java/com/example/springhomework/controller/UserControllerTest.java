@@ -54,6 +54,38 @@ public class UserControllerTest {
   }
 
   @Test
+  void shouldGetAllUsersWhenOnlyPageIsNull() {
+    //given
+    List<User> expect = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    when(userService.findAll()).thenReturn(expect);
+    //when
+    List<User> result = subject.getAll(null, 1);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetAllUsersWhenOnlySizeIsNull() {
+    //given
+    List<User> expect = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    when(userService.findAll()).thenReturn(expect);
+    //when
+    List<User> result = subject.getAll(0, null);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
   void shouldGetOnlyFirstUserInFirstPageWhenPageSizeIs1() {
     //given
     List<User> userList = asList(
@@ -104,6 +136,42 @@ public class UserControllerTest {
   }
 
   @Test
+  void shouldGetAllUsersWithAge18WhenOnlyPageIsNull() {
+    //given
+    List<User> userList = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    Long age = 18L;
+    List<User> expect = userList.subList(0, 1);
+    when(userService.findByAge(age)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByAge(null, 1, age);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetAllUsersWithAge18WhenOnlySizeIsNull() {
+    //given
+    List<User> userList = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    Long age = 18L;
+    List<User> expect = userList.subList(0, 1);
+    when(userService.findByAge(age)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByAge(0, null, age);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
   void shouldGetOnlyFirstUserWithAge18InFirstPageWhenPageSizeIs1() {
     //given
     List<User> userList = asList(
@@ -144,6 +212,42 @@ public class UserControllerTest {
   }
 
   @Test
+  void shouldGetAllUsersWithNameAWhenOnlyPageIsNull() {
+    //given
+    List<User> userList = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    String name = "A";
+    List<User> expect = userList.subList(0, 1);
+    when(userService.findByName(name)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByName(null, 1, name);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetAllUsersWithNameAWhenOnlySizeIsNull() {
+    //given
+    List<User> userList = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
+    );
+    String name = "A";
+    List<User> expect = userList.subList(0, 1);
+    when(userService.findByName(name)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByName(0, null, name);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
   void shouldGetOnlyFirstUserWithNameAInFirstPageWhenPageSizeIs1() {
     //given
     List<User> userList = asList(
@@ -166,7 +270,7 @@ public class UserControllerTest {
   }
 
   @Test
-  void shouldGetAllUsersBetweenMar7thAndMar9th() {
+  void shouldGetAllUsersBetweenMar7thAndMar9thWithoutPagination() {
     //given
     Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
     List<User> expect = asList(
@@ -178,6 +282,40 @@ public class UserControllerTest {
     when(userService.findAllBetweenDates(start, end)).thenReturn(expect);
     //when
     List<User> result = subject.getAllByTime(null, null, start, end);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetAllUsersBetweenMar7thAndMar9thWhenOnlyPageIsNull() {
+    //given
+    Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    List<User> expect = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(instant).updatedAt(instant).build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(instant).updatedAt(instant).build()
+    );
+    Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    when(userService.findAllBetweenDates(start, end)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByTime(null, 1, start, end);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetAllUsersBetweenMar7thAndMar9thWhenOnlySizeIsNull() {
+    //given
+    Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    List<User> expect = asList(
+        User.builder().id(0L).age(18L).name("A").createdAt(instant).updatedAt(instant).build(),
+        User.builder().id(1L).age(19L).name("B").createdAt(instant).updatedAt(instant).build()
+    );
+    Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
+    when(userService.findAllBetweenDates(start, end)).thenReturn(expect);
+    //when
+    List<User> result = subject.getAllByTime(0, null, start, end);
     //then
     assertThat(result).isEqualTo(expect);
   }
