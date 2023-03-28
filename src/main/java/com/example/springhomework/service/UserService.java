@@ -46,10 +46,10 @@ public class UserService {
   }
 
   public void update(User updatedUser) {
-    User savedUser = userRepository.findById(updatedUser.getId()).orElse(null);
-
-    savedUser.setName(updatedUser.getName());
-    savedUser.setAge(updatedUser.getAge());
+//    User savedUser = userRepository.findById(updatedUser.getId()).orElse(null);
+//
+//    savedUser.setName(updatedUser.getName());
+//    savedUser.setAge(updatedUser.getAge());
     userRepository.save(updatedUser);
   }
 
