@@ -1,30 +1,21 @@
 package com.example.springhomework.controller;
 
-import com.example.springhomework.controller.UserController;
-import com.example.springhomework.model.User;
 import com.example.springhomework.dto.Email;
 import com.example.springhomework.dto.UserRequest;
+import com.example.springhomework.model.User;
 import com.example.springhomework.service.EmailClient;
 import com.example.springhomework.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -33,226 +24,219 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
-    @Autowired
-    private MockMvc mvc;
-    @MockBean
+    @Mock
     private UserService userService;
-    @MockBean
+    @Mock
     private EmailClient emailClient;
+    @InjectMocks
+    private UserController subject;
 
     @Test
-    void shouldGetAllUsersWithoutPagination() throws Exception {
-        List<User> response = asList(
+    void shouldGetAllUsersWithoutPagination() {
+        //given
+        List<User> expect = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-
-        when(userService.findAll()).thenReturn(response);
-
-        mvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findAll();
+        when(userService.findAll()).thenReturn(expect);
+        //when
+        List<User> result = subject.getAll(null, null);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetOnlyFirstUserInFirstPageWhenPageSizeIs1() throws Exception {
-        List<User> response = asList(
+    void shouldGetOnlyFirstUserInFirstPageWhenPageSizeIs1() {
+        //given
+        List<User> userList = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<User> page = new PageImpl<>(response, pageable, response.size());
-        when(userService.findAll(0, 1)).thenReturn(page.getContent().subList(0,1));
-
-        mvc.perform(MockMvcRequestBuilders.get("/users?page=0&size=1").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findAll(0, 1);
+        int page = 0;
+        int size = 1;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = new PageImpl<>(userList, pageable, userList.size());
+        List<User> expect = userPage.getContent().subList(0, 1);
+        when(userService.findAll(page, size)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAll(page, size);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetEmptyWhenNoData() throws Exception {
-        when(userService.findAll()).thenReturn(Collections.emptyList());
-
-        mvc.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+    void shouldGetEmptyWhenNoData() {
+        //given
+        List<User> expect = Collections.emptyList();
+        when(userService.findAll()).thenReturn(expect);
+        //when
+        List<User> result = subject.getAll(null, null);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetAllUsersWithAge18() throws Exception {
-        List<User> response = asList(
+    void shouldGetAllUsersWithAge18WithoutPagination() {
+        //given
+        List<User> userList = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-
-        when(userService.findByAge(18L)).thenReturn(response.subList(0,1));
-
-        mvc.perform(MockMvcRequestBuilders.get("/users/?age=18").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findByAge(18L);
+        Long age = 18L;
+        List<User> expect = userList.subList(0, 1);
+        when(userService.findByAge(age)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByAge(null, null, age);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetOnlyFirstUserWithAge18InFirstPageWhenPageSizeIs1() throws Exception {
-        List<User> response = asList(
+    void shouldGetOnlyFirstUserWithAge18InFirstPageWhenPageSizeIs1() {
+        //given
+        List<User> userList = asList(
+                User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
+                User.builder().id(1L).age(18L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
+        );
+        Long age = 18L;
+        int page = 0;
+        int size = 1;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = new PageImpl<>(userList, pageable, userList.size());
+        List<User> expect = userPage.getContent().subList(0, 1);
+        when(userService.findByAge(page, size, age)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByAge(page, size, age);
+        //then
+        assertThat(result).isEqualTo(expect);
+    }
+
+    @Test
+    void shouldGetAllUsersWithNameAWithoutPagination() {
+        //given
+        List<User> userList = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
                 User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<User> page = new PageImpl<>(response, pageable, response.size());
-        when(userService.findByAge(0, 1, 18L)).thenReturn(page.getContent().subList(0,1));
-
-        mvc.perform(MockMvcRequestBuilders.get("/users/?page=0&size=1&age=18").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findByAge(0, 1, 18L);
+        String name = "A";
+        List<User> expect = userList.subList(0, 1);
+        when(userService.findByName(name)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByName(null, null, name);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetAllUsersWithNameA() throws Exception {
-        List<User> response = asList(
+    void shouldGetOnlyFirstUserWithNameAInFirstPageWhenPageSizeIs1() {
+        //given
+        List<User> userList = asList(
                 User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
-                User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
+                User.builder().id(1L).age(19L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build()
         );
-
-        when(userService.findByName("A")).thenReturn(response.subList(0,1));
-
-        mvc.perform(MockMvcRequestBuilders.get("/users/?name=A").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(0)).findByName(0, 1, "A");
-        verify(userService, times(1)).findByName("A");
+        int page = 0;
+        int size = 1;
+        String name = "A";
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = new PageImpl<>(userList, pageable, userList.size());
+        List<User> expect = userPage.getContent().subList(0, 1);
+        when(userService.findByName(page, size, name)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByName(page, size, name);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
-    void shouldGetOnlyFirstUserWithNameAInFirstPageWhenPageSizeIs1() throws Exception {
-        List<User> response = asList(
-                User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
-                User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
-        );
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<User> page = new PageImpl<>(response, pageable, response.size());
-        when(userService.findByName(0, 1, "A")).thenReturn(page.getContent().subList(0,1));
-
-        mvc.perform(MockMvcRequestBuilders.get("/users/?page=0&size=1&name=A").contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findByName(0, 1, "A");
-        verify(userService, times(0)).findByName("A");
-    }
-
-    @Test
-    void shouldGetAllUsersBetweenMar7thAndMar9th() throws Exception {
-        List<User> response = asList(
-                User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
-                User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
-        );
-        Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
-        Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
-        when(userService.findAllBetweenDates(start, end)).thenReturn(response);
-
-        mvc.perform(MockMvcRequestBuilders.get("/users/?from=" + start.toString() + "&to=" + end.toString()).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(2)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(0)).findAllBetweenDates(0, 1, start, end);
-        verify(userService, times(1)).findAllBetweenDates(start, end);
-    }
-
-    @Test
-    void shouldGetOnlyFirstUserBetweenMar7thAndMar9thInFirstPageWhenPageSizeIs1() throws Exception {
-        List<User> response = asList(
-                User.builder().id(0L).age(18L).name("A").createdAt(Instant.now()).updatedAt(Instant.now()).build(),
-                User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
+    void shouldGetAllUsersBetweenMar7thAndMar9th() {
+        //given
+        Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
+        List<User> expect = asList(
+                User.builder().id(0L).age(18L).name("A").createdAt(instant).updatedAt(instant).build(),
+                User.builder().id(1L).age(19L).name("B").createdAt(instant).updatedAt(instant).build()
         );
         Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
         Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
-        Pageable pageable = PageRequest.of(0, 1);
-        Page<User> page = new PageImpl<>(response, pageable, response.size());
-        when(userService.findAllBetweenDates(0, 1, start, end)).thenReturn(page.getContent().subList(0,1));
+        when(userService.findAllBetweenDates(start, end)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByTime(null, null, start, end);
+        //then
+        assertThat(result).isEqualTo(expect);
+    }
 
-        mvc.perform(MockMvcRequestBuilders.get("/users/?page=0&size=1&from=" + start.toString() + "&to=" + end.toString()).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(1)))
-                .andExpect(jsonPath("$[0].id", is(0)))
-                .andExpect(jsonPath("$[0].age", is(18)))
-                .andExpect(jsonPath("$[0].name", is("A")));
-        verify(userService, times(1)).findAllBetweenDates(0, 1, start, end);
-        verify(userService, times(0)).findAllBetweenDates(start, end);
+    @Test
+    void shouldGetOnlyFirstUserBetweenMar7thAndMar9thInFirstPageWhenPageSizeIs1() {
+        //given
+        Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
+        List<User> userList = asList(
+                User.builder().id(0L).age(18L).name("A").createdAt(instant).updatedAt(instant).build(),
+                User.builder().id(1L).age(19L).name("B").createdAt(instant).updatedAt(instant).build()
+        );
+        Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
+        Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
+        int page = 0;
+        int size = 1;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = new PageImpl<>(userList, pageable, userList.size());
+        List<User> expect = userPage.getContent().subList(0, 1);
+        when(userService.findAllBetweenDates(page, size, start, end)).thenReturn(expect);
+        //when
+        List<User> result = subject.getAllByTime(page, size, start, end);
+        //then
+        assertThat(result).isEqualTo(expect);
     }
 
     @Test
     void shouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
+        //given
+        List<Email> emailList = List.of(new Email(null, null, "A@thoughtworks.com"));
+        UserRequest userRequest = new UserRequest("A", 18L, emailList);
         User savedUser = new User();
-        savedUser.setName("A");
-        savedUser.setAge(18L);
-        List<Email> emailList = List.of(new Email(1L, null, "A@thoughtworks.com"));
-        UserRequest userRequest = new UserRequest(savedUser.getName(), savedUser.getAge(),emailList);
+        savedUser.setAge(userRequest.getAge());
+        savedUser.setName(userRequest.getName());
         doNothing().when(userService).save(savedUser);
-        when(emailClient.saveEmail(1L, emailList)).thenReturn(new ResponseEntity<>("EMAIL SAVED SUCCESSFULLY", HttpStatus.CREATED));
-
-        mvc.perform(MockMvcRequestBuilders.post("/users").
-                content(new ObjectMapper().writeValueAsString(userRequest)).
-                contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$").value("USER SAVED SUCCESSFULLY"));
+        when(emailClient.saveEmail(null, emailList)).thenReturn(new ResponseEntity<>("EMAIL SAVED SUCCESSFULLY", HttpStatus.CREATED));
+        ResponseEntity<String> expect = new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
+        //when
+        ResponseEntity<String> result = subject.save(userRequest);
+        //then
         verify(userService, times(1)).save(savedUser);
         verify(emailClient, times(1)).saveEmail(null, emailList);
+        assertThat(result).isEqualTo(expect);
     }
+
     @Test
-    void shouldGetSuccessWhenOneUserDeleted() throws Exception {
+    void shouldGetSuccessWhenOneUserDeleted() {
+        //given
+        Long id = 1L;
         User deletedUser = new User();
-        deletedUser.setId(1L);
-
-        mvc.perform(MockMvcRequestBuilders.delete("/users/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("USER DELETED SUCCESSFULLY"));
-
-        verify(userService, times(1)).delete(refEq(deletedUser));
+        deletedUser.setId(id);
+        doNothing().when(userService).delete(deletedUser);
+        //when
+        ResponseEntity<String> result = subject.delete(id);
+        //then
+        verify(userService,times(1)).delete(deletedUser);
+        assertThat(result).isEqualTo(new ResponseEntity<>("USER DELETED SUCCESSFULLY", HttpStatus.OK));
     }
 
     @Test
     void shouldGetSuccessWhenUserUpdatedSuccessfully() throws Exception {
-        User updatedUser = User.builder().name("UPDATE").age(100L).build();
-
-        doNothing().when(userService).update(refEq(updatedUser));
-
-        mvc.perform(MockMvcRequestBuilders.put("/users/1")
-                    .content(new ObjectMapper().writeValueAsString(updatedUser))
-                    .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("USER UPDATED SUCCESSFULLY"));
+        //given
+        Long id = 1L;
+        String name = "UPDATE";
+        Long age = 100L;
+        User updatedUser = User.builder().name(name).age(age).build();
+        doNothing().when(userService).update(updatedUser);
+        //when
+        ResponseEntity<String> result = subject.update(id, updatedUser);
+        //then
+        verify(userService, times(1)).update(updatedUser);
+        assertThat(updatedUser.getId()).isEqualTo(id);
+        assertThat(result).isEqualTo(new ResponseEntity<>("USER UPDATED SUCCESSFULLY", HttpStatus.OK));
     }
 }
