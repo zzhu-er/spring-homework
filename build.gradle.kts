@@ -20,19 +20,24 @@ repositories {
 }
 
 dependencies {
-	implementation ("com.google.code.gson:gson:2.10.1")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.8")
 	implementation("org.flywaydb:flyway-core:8.5.11")
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.3")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-hystrix:2.2.10.RELEASE")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	compileOnly("org.projectlombok:lombok")
+	compileOnly("org.projectlombok:lombok:1.18.26")
 	runtimeOnly("org.postgresql:postgresql")
-	annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok:1.18.26")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.h2database:h2:2.1.214")
 	testImplementation("org.assertj:assertj-core:3.24.2")
+	testCompileOnly ("org.projectlombok:lombok:1.18.26")
+	testAnnotationProcessor ("org.projectlombok:lombok:1.18.26")
+}
+
+jacoco {
+	toolVersion = "0.8.8"
 }
 
 tasks.withType<Test> {
