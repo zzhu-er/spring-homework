@@ -9,20 +9,21 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.Instant;
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User,Long> {
-//    @Query("select u from User u where u.age= :age")
+public interface UserRepository extends JpaRepository<User, Long> {
+
+  //    @Query("select u from User u where u.age= :age")
 //    List<User> findAllByAge(@Param("age") Long age);
-    List<User> findByAge(Long age);
+  List<User> findByAge(Long age);
 
-    Page<User> findByAge(Pageable pageRequest, Long age);
+  Page<User> findByAge(Pageable pageRequest, Long age);
 
-    List<User> findByName(String name);
+  List<User> findByName(String name);
 
-    Page<User> findByName(Pageable pageRequest, String name);
+  Page<User> findByName(Pageable pageRequest, String name);
 
-    @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
-    List<User> findByCreatedAtBetween(Instant startDate, Instant endDate);
+  @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
+  List<User> findByCreatedAtBetween(Instant startDate, Instant endDate);
 
-    @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
-    Page<User> findByCreatedAtBetween(Pageable pageRequest, Instant startDate, Instant endDate);
+  @Query(value = "SELECT * FROM users WHERE created_at BETWEEN :startDate AND :endDate", nativeQuery = true)
+  Page<User> findByCreatedAtBetween(Pageable pageRequest, Instant startDate, Instant endDate);
 }

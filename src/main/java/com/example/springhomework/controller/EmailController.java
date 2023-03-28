@@ -12,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 public class EmailController {
 
-    private EmailClient emailClient;
+  private EmailClient emailClient;
 
-    @GetMapping("/{id}")
-    public List<Email> getByUserId(@PathVariable Long id) throws Exception {
-        return emailClient.getById(id);
-    }
+  @GetMapping("/{id}")
+  public List<Email> getByUserId(@PathVariable Long id) throws Exception {
+    return emailClient.getById(id);
+  }
 }
 

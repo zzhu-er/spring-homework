@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class UserRequest {
-    private String name;
-    private Long age;
-    private List<Email> emails;
+
+  private String name;
+  private Long age;
+  private List<Email> emails;
 }

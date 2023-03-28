@@ -18,20 +18,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class EmailFallbackTest {
-    @Autowired
-    private EmailFallback emailFallback;
 
-    @Test
-    void shouldReturnEmptyListWhenGetById() {
-        Long userId = 1L;
-        List<Email> result = emailFallback.getById(userId);
-        assertEquals(Collections.emptyList(), result);
-    }
+  @Autowired
+  private EmailFallback emailFallback;
 
-    @Test
-    void shouldThrowRunTimeExceptionWhenSaveEmail() {
-        Long userId = 1L;
-        List<Email> emailList = List.of(new Email());
-        assertThrows(RuntimeException.class, ()->emailFallback.saveEmail(userId, emailList));
-    }
+  @Test
+  void shouldReturnEmptyListWhenGetById() {
+    Long userId = 1L;
+    List<Email> result = emailFallback.getById(userId);
+    assertEquals(Collections.emptyList(), result);
+  }
+
+  @Test
+  void shouldThrowRunTimeExceptionWhenSaveEmail() {
+    Long userId = 1L;
+    List<Email> emailList = List.of(new Email());
+    assertThrows(RuntimeException.class, () -> emailFallback.saveEmail(userId, emailList));
+  }
 }

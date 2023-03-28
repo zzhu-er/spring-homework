@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @FeignClient(value = "emailservice",
-        url = "${service.endpoints.email}",
-        configuration = FeignConfig.class,
-        fallback = EmailFallback.class)
+    url = "${service.endpoints.email}",
+    configuration = FeignConfig.class,
+    fallback = EmailFallback.class)
 public interface EmailClient {
-    @GetMapping("/{id}")
-    List<Email> getById(@PathVariable Long id) throws Exception;
-    @PostMapping("/{userId}")
-    ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails) throws Exception;
+
+  @GetMapping("/{id}")
+  List<Email> getById(@PathVariable Long id) throws Exception;
+
+  @PostMapping("/{userId}")
+  ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails)
+      throws Exception;
 }

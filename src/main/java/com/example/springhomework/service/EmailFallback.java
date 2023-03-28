@@ -13,13 +13,13 @@ import static org.springframework.http.ResponseEntity.status;
 @Component
 public class EmailFallback implements EmailClient {
 
-    @Override
-    public List<Email> getById(Long id){
-        return Collections.emptyList();
-    }
+  @Override
+  public List<Email> getById(Long id) {
+    return Collections.emptyList();
+  }
 
-    @Override
-    public ResponseEntity<String> saveEmail(Long userId, List<Email> savedEmails) {
-        throw new RuntimeException("Email Service Not Working");
-    }
+  @Override
+  public ResponseEntity<String> saveEmail(Long userId, List<Email> savedEmails) {
+    throw new RuntimeException("Email Service Not Working");
+  }
 }

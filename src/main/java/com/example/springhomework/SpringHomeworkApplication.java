@@ -10,9 +10,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @EnableFeignClients
 public class SpringHomeworkApplication {
-	@Generated
-	public static void main(String[] args) {
-		SpringApplication.run(SpringHomeworkApplication.class, args);
-	}
+
+  @Generated
+  public static void main(String[] args) {
+    SpringApplication.run(SpringHomeworkApplication.class, args);
+  }
 
 }

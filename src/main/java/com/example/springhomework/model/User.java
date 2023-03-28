@@ -19,16 +19,17 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private Long age;
-    @CreatedDate
-    @Column(updatable = false)
-    private Instant createdAt;
-    @LastModifiedDate
-    private Instant updatedAt;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  @Column(nullable = false)
+  private String name;
+  @Column(nullable = false)
+  private Long age;
+  @CreatedDate
+  @Column(updatable = false)
+  private Instant createdAt;
+  @LastModifiedDate
+  private Instant updatedAt;
 }

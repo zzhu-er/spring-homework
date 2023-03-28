@@ -17,21 +17,21 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class EmailControllerTest {
 
-    @Mock
-    private EmailClient emailClient;
+  @Mock
+  private EmailClient emailClient;
 
-    @InjectMocks
-    private EmailController subject;
+  @InjectMocks
+  private EmailController subject;
 
-    @Test
-    void shouldCallEmailClientGetByIdSuccessfully() throws Exception {
-        //given
-        Long userId = 1L;
-        List<Email> expect = Collections.emptyList();
-        when(emailClient.getById(userId)).thenReturn(expect);
-        //when
-        List<Email> result = subject.getByUserId(userId);
-        //then
-        assertThat(result).isEqualTo(expect);
-    }
+  @Test
+  void shouldCallEmailClientGetByIdSuccessfully() throws Exception {
+    //given
+    Long userId = 1L;
+    List<Email> expect = Collections.emptyList();
+    when(emailClient.getById(userId)).thenReturn(expect);
+    //when
+    List<Email> result = subject.getByUserId(userId);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
 }
