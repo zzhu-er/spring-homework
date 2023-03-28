@@ -1,38 +1,38 @@
 package com.example.springhomework.service;
 
 import com.example.springhomework.dto.Email;
-import com.example.springhomework.service.EmailFallback;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-
 import java.util.Collections;
 import java.util.List;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class EmailFallbackTest {
 
-  @Autowired
-  private EmailFallback emailFallback;
+  private EmailFallback subject;
+
+  @BeforeEach
+  void setUp() {
+    subject = new EmailFallback();
+  }
 
   @Test
   void shouldReturnEmptyListWhenGetById() {
+    //given
     Long userId = 1L;
-    List<Email> result = emailFallback.getById(userId);
-    assertEquals(Collections.emptyList(), result);
+    //when
+    List<Email> result = subject.getById(userId);
+    //then
+    Assertions.assertThat(result).isEqualTo(Collections.emptyList());
   }
 
   @Test
   void shouldThrowRunTimeExceptionWhenSaveEmail() {
+    //given
     Long userId = 1L;
     List<Email> emailList = List.of(new Email());
-    assertThrows(RuntimeException.class, () -> emailFallback.saveEmail(userId, emailList));
+    //when & then
+    Assertions.assertThatThrownBy(() -> subject.saveEmail(userId, emailList))
+        .isInstanceOf(RuntimeException.class);
   }
 }
