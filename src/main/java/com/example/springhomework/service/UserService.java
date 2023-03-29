@@ -1,5 +1,6 @@
 package com.example.springhomework.service;
 
+import com.example.springhomework.controller.UserController;
 import com.example.springhomework.dto.Email;
 import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.model.User;
@@ -83,5 +84,9 @@ public class UserService {
     Pageable pagination = PageRequest.of(page, size);
     Page<User> allUsers = userRepository.findByCreatedAtBetween(pagination, startDate, endDate);
     return allUsers.getContent();
+  }
+
+  public List<Email> getEmailsByUserId(Long id) throws Exception {
+    return emailClient.getById(id);
   }
 }

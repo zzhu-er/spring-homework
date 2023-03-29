@@ -32,8 +32,6 @@ public class UserControllerTest {
 
   @Mock
   private UserService userService;
-  @Mock
-  private EmailClient emailClient;
   @InjectMocks
   private UserController subject;
 
@@ -391,7 +389,7 @@ public class UserControllerTest {
     //given
     Long userId = 1L;
     List<Email> expect = Collections.emptyList();
-    when(emailClient.getById(userId)).thenReturn(expect);
+    when(userService.getEmailsByUserId(userId)).thenReturn(expect);
     //when
     List<Email> result = subject.getEmailsByUserId(userId);
     //then

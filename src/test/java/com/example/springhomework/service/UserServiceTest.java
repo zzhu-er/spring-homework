@@ -4,7 +4,6 @@ import com.example.springhomework.dto.Email;
 import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -243,5 +242,17 @@ public class UserServiceTest {
     subject.update(updatedUser);
     //then
     verify(userRepository, times(1)).save(updatedUser);
+  }
+
+  @Test
+  void shouldGetEmailListCorrespondingToASpecificUserId() throws Exception {
+    //given
+    Long userId = 1L;
+    List<Email> expect = List.of(new Email());
+    when(emailClient.getById(userId)).thenReturn(expect);
+    //when
+    List<Email> result = subject.getEmailsByUserId(userId);
+    //then
+    Assertions.assertThat(result).isEqualTo(expect);
   }
 }
