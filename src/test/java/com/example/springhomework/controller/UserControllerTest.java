@@ -347,19 +347,12 @@ public class UserControllerTest {
     //given
     List<Email> emailList = List.of(new Email(null, null, "A@thoughtworks.com"));
     UserRequest userRequest = new UserRequest("A", 18L, emailList);
-    User savedUser = new User();
-    savedUser.setAge(userRequest.getAge());
-    savedUser.setName(userRequest.getName());
-//    doNothing().when(userService).save(savedUser);
-    when(emailClient.saveEmail(null, emailList)).thenReturn(
-        new ResponseEntity<>("EMAIL SAVED SUCCESSFULLY", HttpStatus.CREATED));
     ResponseEntity<String> expect = new ResponseEntity<>("USER SAVED SUCCESSFULLY",
         HttpStatus.CREATED);
+    when(userService.save(userRequest)).thenReturn(expect);
     //when
     ResponseEntity<String> result = subject.save(userRequest);
     //then
-    verify(userService, times(1)).save(savedUser);
-//    verify(emailClient, times(1)).saveEmail(null, emailList);
     assertThat(result).isEqualTo(expect);
   }
 

@@ -1,21 +1,27 @@
 package com.example.springhomework.service;
 
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
   private UserRepository userRepository;
+  private EmailClient emailClient;
 
   public List<User> findAll() {
     return userRepository.findAll();
@@ -37,8 +43,13 @@ public class UserService {
     return allUsers.getContent();
   }
 
-  public void save(User savedUser) {
-    userRepository.save(savedUser);
+  @Transactional
+  public ResponseEntity<String> save(UserRequest userRequest) throws Exception {
+    User user = User.builder().name(userRequest.getName()).age(userRequest.getAge()).build();
+    List<Email> savedEmails = userRequest.getEmails();
+    User savedUser = userRepository.save(user);
+    emailClient.saveEmail(savedUser.getId(), savedEmails);
+    return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
   }
 
   public void delete(User deletedUser) {

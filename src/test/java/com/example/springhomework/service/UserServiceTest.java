@@ -1,5 +1,7 @@
 package com.example.springhomework.service;
 
+import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
 import java.util.Optional;
@@ -19,6 +21,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +34,8 @@ public class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
+  @Mock
+  private EmailClient emailClient;
   @InjectMocks
   private UserService subject;
 
@@ -198,15 +204,22 @@ public class UserServiceTest {
   }
 
   @Test
-  void shouldSaveSuccessfully() {
+  void shouldSaveSuccessfully() throws Exception {
     //given
-    User savedUser = User.builder().id(0L).age(18L).name("A").createdAt(Instant.now())
+    List<Email> emailList = List.of(new Email());
+    UserRequest userRequest = new UserRequest("A", 18L, emailList);
+    User user = User.builder().age(userRequest.getAge()).name(userRequest.getName()).build();
+    User savedUser = User.builder().id(1L).age(user.getAge()).name(user.getName())
+        .createdAt(Instant.now())
         .updatedAt(Instant.now()).build();
-    when(userRepository.save(savedUser)).thenReturn(savedUser);
+    when(userRepository.save(user)).thenReturn(savedUser);
+    ResponseEntity<String> expect = new ResponseEntity<>("USER SAVED SUCCESSFULLY",
+        HttpStatus.CREATED);
     //when
-    subject.save(savedUser);
+    ResponseEntity<String> result = subject.save(userRequest);
     //then
-    verify(userRepository, times(1)).save(savedUser);
+    verify(emailClient, times(1)).saveEmail(savedUser.getId(), emailList);
+    Assertions.assertThat(result).isEqualTo(expect);
   }
 
   @Test

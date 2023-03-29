@@ -61,14 +61,9 @@ public class UserController {
     return userService.findAllBetweenDates(page, size, startDate, endDate);
   }
 
-  @Transactional
   @PostMapping
   public ResponseEntity<String> save(@RequestBody UserRequest userRequest) throws Exception {
-    User savedUser = User.builder().name(userRequest.getName()).age(userRequest.getAge()).build();
-    List<Email> savedEmails = userRequest.getEmails();
-    userService.save(savedUser);
-    emailClient.saveEmail(savedUser.getId(), savedEmails);
-    return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
+    return userService.save(userRequest);
   }
 
   @DeleteMapping("/{id}")
