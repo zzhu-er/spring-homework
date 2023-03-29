@@ -1,9 +1,20 @@
 package com.example.springhomework.service;
 
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.example.springhomework.dto.Email;
 import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,19 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Collections;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -205,7 +205,7 @@ public class UserServiceTest {
   @Test
   void shouldSaveSuccessfully() throws Exception {
     //given
-    List<Email> emailList = List.of(new Email());
+    List<Email> emailList = List.of(new Email("test@thoughtworks.com"));
     UserRequest userRequest = new UserRequest("A", 18L, emailList);
     User user = User.builder().age(userRequest.getAge()).name(userRequest.getName()).build();
     User savedUser = User.builder().id(1L).age(user.getAge()).name(user.getName())
@@ -248,7 +248,7 @@ public class UserServiceTest {
   void shouldGetEmailListCorrespondingToASpecificUserId() throws Exception {
     //given
     Long userId = 1L;
-    List<Email> expect = List.of(new Email());
+    List<Email> expect = List.of(new Email("test@thoughtworks.com"));
     when(emailClient.getById(userId)).thenReturn(expect);
     //when
     List<Email> result = subject.getEmailsByUserId(userId);

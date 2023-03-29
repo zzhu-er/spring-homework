@@ -343,7 +343,7 @@ public class UserControllerTest {
   @Test
   void shouldGetSuccessWhenSaveUserSuccessfully() throws Exception {
     //given
-    List<Email> emailList = List.of(new Email(null, null, "A@thoughtworks.com"));
+    List<Email> emailList = List.of(new Email("A@thoughtworks.com"));
     UserRequest userRequest = new UserRequest("A", 18L, emailList);
     ResponseEntity<String> expect = new ResponseEntity<>("USER SAVED SUCCESSFULLY",
         HttpStatus.CREATED);

@@ -30,7 +30,7 @@ public class EmailFallbackTest {
   void shouldThrowRunTimeExceptionWhenSaveEmail() {
     //given
     Long userId = 1L;
-    List<Email> emailList = List.of(new Email());
+    List<Email> emailList = List.of(new Email("test@thoughtworks.com"));
     //when & then
     Assertions.assertThatThrownBy(() -> subject.saveEmail(userId, emailList))
         .isInstanceOf(RuntimeException.class);
