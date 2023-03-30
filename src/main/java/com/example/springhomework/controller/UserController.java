@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,22 +32,15 @@ public class UserController {
   public List<User> queryAllDynamically(@RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer size,
       @RequestParam(required = false) Long age,
-      @RequestParam(required = false) String name) {
+      @RequestParam(required = false) String name,
+      @RequestParam(value = "from", required = false)
+      @DateTimeFormat(iso = ISO.DATE_TIME) Instant startDate,
+      @RequestParam(value = "to", required = false)
+      @DateTimeFormat(iso = ISO.DATE_TIME) Instant endDate) {
     if (page == null || size == null) {
-      return userService.findAllDynamically(age, name);
+      return userService.findAllDynamically(age, name, startDate, endDate);
     }
-    return userService.findAllDynamicallyWithPagination(page, size, age, name);
-  }
-
-  @GetMapping(value = "/", params = {"from", "to"})
-  public List<User> getAllByTime(@RequestParam(required = false) Integer page,
-      @RequestParam(required = false) Integer size,
-      @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant startDate,
-      @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant endDate) {
-    if (page == null || size == null) {
-      return userService.findAllBetweenDates(startDate, endDate);
-    }
-    return userService.findAllBetweenDates(page, size, startDate, endDate);
+    return userService.findAllDynamicallyWithPagination(page, size, age, name, startDate, endDate);
   }
 
   @PostMapping

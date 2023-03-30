@@ -46,23 +46,12 @@ public class UserService {
     userRepository.save(updatedUser);
   }
 
-  public List<User> findAllBetweenDates(Instant startDate, Instant endDate) {
-    return userRepository.findByCreatedAtBetween(startDate, endDate);
-  }
-
-  public List<User> findAllBetweenDates(Integer page, Integer size, Instant startDate,
-      Instant endDate) {
-    Pageable pagination = PageRequest.of(page, size);
-    Page<User> allUsers = userRepository.findByCreatedAtBetween(pagination, startDate, endDate);
-    return allUsers.getContent();
-  }
-
   public List<Email> getEmailsByUserId(Long id) throws Exception {
     return emailClient.getById(id);
   }
 
-  public List<User> findAllDynamically(Long age, String name) {
-    Specification<User> specification = getUserSpecification(age, name);
+  public List<User> findAllDynamically(Long age, String name, Instant startDate, Instant endDate) {
+    Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     return userRepository.findAll(specification);
   }
 
@@ -73,14 +62,15 @@ public class UserService {
 //  val result = subject.findAllDynamically(1, 2)
 
   public List<User> findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
-      String name) {
-    Specification<User> specification = getUserSpecification(age, name);
+      String name, Instant startDate, Instant endDate) {
+    Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     Pageable pagination = PageRequest.of(page, size);
     Page<User> allUsers = userRepository.findAll(specification, pagination);
     return allUsers.getContent();
   }
 
-  private static Specification<User> getUserSpecification(Long age, String name) {
+  private static Specification<User> getUserSpecification(Long age, String name, Instant startDate,
+      Instant endDate) {
     return (root, query, criteriaBuilder) -> {
       List<Predicate> predicateList = new ArrayList<>();
       if (age != null) {
@@ -89,6 +79,14 @@ public class UserService {
       }
       if (name != null) {
         Predicate namePredicate = criteriaBuilder.equal(root.get("name"), name);
+        predicateList.add(namePredicate);
+      }
+      if (startDate != null) {
+        Predicate namePredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), startDate);
+        predicateList.add(namePredicate);
+      }
+      if (endDate != null) {
+        Predicate namePredicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), endDate);
         predicateList.add(namePredicate);
       }
       Predicate[] predicates = new Predicate[predicateList.size()];
