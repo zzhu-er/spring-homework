@@ -28,30 +28,14 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public List<User> getAll(@RequestParam(required = false) Integer page,
-      @RequestParam(required = false) Integer size) {
+  public List<User> queryAllDynamically(@RequestParam(required = false) Integer page,
+      @RequestParam(required = false) Integer size,
+      @RequestParam(required = false) Long age,
+      @RequestParam(required = false) String name) {
     if (page == null || size == null) {
-      return userService.findAll();
+      return userService.findAllDynamically(age, name);
     }
-    return userService.findAll(page, size);
-  }
-
-  @GetMapping(value = "/", params = "age")
-  public List<User> getAllByAge(@RequestParam(required = false) Integer page,
-      @RequestParam(required = false) Integer size, @RequestParam Long age) {
-    if (page == null || size == null) {
-      return userService.findByAge(age);
-    }
-    return userService.findByAge(page, size, age);
-  }
-
-  @GetMapping(value = "/", params = "name")
-  public List<User> getAllByName(@RequestParam(required = false) Integer page,
-      @RequestParam(required = false) Integer size, @RequestParam String name) {
-    if (page == null || size == null) {
-      return userService.findByName(name);
-    }
-    return userService.findByName(page, size, name);
+    return userService.findAllDynamicallyWithPagination(page, size, age, name);
   }
 
   @GetMapping(value = "/", params = {"from", "to"})
