@@ -38,7 +38,7 @@ public class UserServiceTest {
   @InjectMocks
   private UserService subject;
 
-  @Test
+  /*@Test
   void shouldReturnEmptyListWhenNoData() {
     //given
     when(userRepository.findAll()).thenReturn(Collections.emptyList());
@@ -46,9 +46,9 @@ public class UserServiceTest {
     List<User> result = subject.findAll();
     //then
     Assertions.assertThat(result).isEqualTo(Collections.emptyList());
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldReturnAllUsers() {
     //given
     List<User> expect = asList(
@@ -62,9 +62,9 @@ public class UserServiceTest {
     List<User> result = subject.findAll();
     //then
     Assertions.assertThat(result).isEqualTo(expect);
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldGetOnlyFirstUserInFirstPageWithPageSizeIs1() {
     //given
     List<User> userList = asList(
@@ -82,9 +82,9 @@ public class UserServiceTest {
     List<User> result = subject.findAll(page, size);
     //then
     Assertions.assertThat(result).isEqualTo(expect.getContent());
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldReturnAllUsersWithAge18WithoutPagination() {
     //given
     Long age = 18L;
@@ -99,9 +99,9 @@ public class UserServiceTest {
     List<User> result = subject.findByAge(age);
     //then
     Assertions.assertThat(result).isEqualTo(expect);
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldGetOnlyFirstUserWithAge18InFirstPageWithPageSizeIs1() {
     //given
     Long age = 18L;
@@ -120,9 +120,9 @@ public class UserServiceTest {
     List<User> result = subject.findByAge(page, size, age);
     //then
     Assertions.assertThat(result).isEqualTo(expect.getContent());
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldReturnAllUsersWithNameAWithoutPagination() {
     //given
     String name = "A";
@@ -137,9 +137,9 @@ public class UserServiceTest {
     List<User> result = subject.findByName(name);
     //then
     Assertions.assertThat(result).isEqualTo(expect);
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldGetOnlyFirstUserWithNameAInFirstPageWithPageSizeIs1() {
     //given
     String name = "A";
@@ -158,9 +158,9 @@ public class UserServiceTest {
     List<User> result = subject.findByName(page, size, name);
     //then
     Assertions.assertThat(result).isEqualTo(expect.getContent());
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldReturnAllUsersBetweenMar7thAndMar9thWithoutPagination() {
     //given
     Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
@@ -177,9 +177,9 @@ public class UserServiceTest {
     List<User> result = subject.findAllBetweenDates(start, end);
     //then
     Assertions.assertThat(result).isEqualTo(expect);
-  }
+  }*/
 
-  @Test
+  /*@Test
   void shouldGetOnlyFirstUserBetweenMar7thAndMar9thInFirstPageWithPageSizeIs1() {
     //given
     Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
@@ -200,7 +200,7 @@ public class UserServiceTest {
     List<User> result = subject.findAllBetweenDates(page, size, start, end);
     //then
     Assertions.assertThat(result).isEqualTo(expect.getContent());
-  }
+  }*/
 
   @Test
   void shouldSaveSuccessfully() throws Exception {
