@@ -39,10 +39,6 @@ public class UserService {
   }
 
   public void update(User updatedUser) {
-//    User savedUser = userRepository.findById(updatedUser.getId()).orElse(null);
-//
-//    savedUser.setName(updatedUser.getName());
-//    savedUser.setAge(updatedUser.getAge());
     userRepository.save(updatedUser);
   }
 
@@ -54,12 +50,6 @@ public class UserService {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     return userRepository.findAll(specification);
   }
-
-//  given: when userRepository.findAll(argThat(arg -> { arg.length == 3, arg.[0] .key =="name"}))
-//  .thenReturn(expected)
-
-//  when
-//  val result = subject.findAllDynamically(1, 2)
 
   public List<User> findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
       String name, Instant startDate, Instant endDate) {
@@ -82,12 +72,14 @@ public class UserService {
         predicateList.add(namePredicate);
       }
       if (startDate != null) {
-        Predicate namePredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), startDate);
-        predicateList.add(namePredicate);
+        Predicate startDatePredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"),
+            startDate);
+        predicateList.add(startDatePredicate);
       }
       if (endDate != null) {
-        Predicate namePredicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), endDate);
-        predicateList.add(namePredicate);
+        Predicate endDatePredicate = criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"),
+            endDate);
+        predicateList.add(endDatePredicate);
       }
       Predicate[] predicates = new Predicate[predicateList.size()];
       return criteriaBuilder.and(predicateList.toArray(predicates));
