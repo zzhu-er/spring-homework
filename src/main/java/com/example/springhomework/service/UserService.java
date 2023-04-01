@@ -7,6 +7,7 @@ import com.example.springhomework.repository.UserRepository;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -59,6 +60,10 @@ public class UserService {
     return allUsers.getContent();
   }
 
+  public Optional<User> getUserById(Long id) {
+    return userRepository.findById(id);
+  }
+
   private static Specification<User> getUserSpecification(Long age, String name, Instant startDate,
       Instant endDate) {
     return (root, query, criteriaBuilder) -> {
@@ -85,4 +90,5 @@ public class UserService {
       return criteriaBuilder.and(predicateList.toArray(predicates));
     };
   }
+
 }

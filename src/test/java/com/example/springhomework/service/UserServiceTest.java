@@ -11,6 +11,7 @@ import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,6 +81,18 @@ public class UserServiceTest {
     when(emailClient.getById(userId)).thenReturn(expect);
     //when
     List<Email> result = subject.getEmailsByUserId(userId);
+    //then
+    Assertions.assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetUserWhoseIdIsOne() {
+    //given
+    Long id = 1L;
+    Optional<User> expect = Optional.of(User.builder().id(1L).age(18L).name("A").build());
+    when(userRepository.findById(id)).thenReturn(expect);
+    //when
+    Optional<User> result = subject.getUserById(id);
     //then
     Assertions.assertThat(result).isEqualTo(expect);
   }

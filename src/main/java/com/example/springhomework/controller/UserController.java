@@ -6,6 +6,7 @@ import com.example.springhomework.model.User;
 import com.example.springhomework.service.UserService;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/users")
@@ -67,4 +69,13 @@ public class UserController {
     return userService.getEmailsByUserId(id);
   }
 
+  @GetMapping("/{id}")
+  public User getUserById(@PathVariable Long id) {
+    Optional<User> userById = userService.getUserById(id);
+    if (userById.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          String.format("User with id %d not existed", id));
+    }
+    return userById.get();
+  }
 }

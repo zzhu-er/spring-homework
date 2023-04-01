@@ -2,6 +2,8 @@ package com.example.springhomework.controller;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,6 +18,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -81,7 +86,8 @@ public class UserControllerTest {
     Instant instant = LocalDate.parse("2023-03-08").atStartOfDay(ZoneId.of("UTC")).toInstant();
     List<User> userList = asList(
         User.builder().id(0L).age(18L).name("A").createdAt(instant).updatedAt(instant).build(),
-        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now()).build()
+        User.builder().id(1L).age(19L).name("B").createdAt(Instant.now()).updatedAt(Instant.now())
+            .build()
     );
     Instant start = LocalDate.parse("2023-03-07").atStartOfDay(ZoneId.of("UTC")).toInstant();
     Instant end = LocalDate.parse("2023-03-09").atStartOfDay(ZoneId.of("UTC")).toInstant();
@@ -112,7 +118,9 @@ public class UserControllerTest {
     Long age = 18L;
     String name = "B";
     List<User> expect = userList.subList(1, 2);
-    when(userService.findAllDynamicallyWithPagination(page, size, age, name, null, null)).thenReturn(expect);
+    when(
+        userService.findAllDynamicallyWithPagination(page, size, age, name, null, null)).thenReturn(
+        expect);
     //when
     List<User> result = subject.queryAllDynamically(page, size, age, name, null, null);
     //then
@@ -145,7 +153,9 @@ public class UserControllerTest {
     Long age = 18L;
     String name = "B";
     List<User> expect = userList.subList(2, 3);
-    when(userService.findAllDynamicallyWithPagination(page, size, age, name, start, end)).thenReturn(expect);
+    when(
+        userService.findAllDynamicallyWithPagination(page, size, age, name, start, end)).thenReturn(
+        expect);
     //when
     List<User> result = subject.queryAllDynamically(page, size, age, name, start, end);
     //then
@@ -206,5 +216,31 @@ public class UserControllerTest {
     List<Email> result = subject.getEmailsByUserId(userId);
     //then
     assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldGetUserWhoseIdIs1() {
+    //given
+    Long id = 1L;
+    User expect = User.builder().id(1L).age(18L).name("A").build();
+    when(userService.getUserById(id)).thenReturn(Optional.ofNullable(expect));
+    //when
+    User result = subject.getUserById(id);
+    //then
+    assertThat(result).isEqualTo(expect);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenUserNotExist() {
+    //given
+    Long id = 1L;
+    when(userService.getUserById(id)).thenReturn(Optional.empty());
+    //when
+    ResponseStatusException caughtException = catchThrowableOfType(
+        () -> subject.getUserById(id), ResponseStatusException.class);
+    //then
+    assertThat(caughtException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+    assertThat(caughtException.getReason()).isEqualTo(
+        String.format("User with id %d not existed", id));
   }
 }
