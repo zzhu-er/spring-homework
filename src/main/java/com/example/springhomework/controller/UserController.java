@@ -78,4 +78,18 @@ public class UserController {
     }
     return userById.get();
   }
+
+  @DeleteMapping("/{id}/emails/{emailId}")
+  public ResponseEntity<String> deleteEmailFromUser(@PathVariable Long id,
+      @PathVariable Long emailId) throws Exception {
+    userService.deleteEmailByEmailId(emailId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping("/{id}/emails")
+  public ResponseEntity<String> saveEmailsUnderUser(@PathVariable Long id, @RequestBody List<Email> emailList)
+      throws Exception {
+    userService.saveEmailUnderUser(id, emailList);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
 }

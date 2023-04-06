@@ -64,6 +64,14 @@ public class UserService {
     return userRepository.findById(id);
   }
 
+  public void deleteEmailByEmailId(Long emailId) throws Exception {
+    emailClient.deleteEmail(emailId);
+  }
+
+  public void saveEmailUnderUser(Long id, List<Email> emailList) throws Exception {
+    emailClient.saveEmail(id, emailList);
+  }
+
   private static Specification<User> getUserSpecification(Long age, String name, Instant startDate,
       Instant endDate) {
     return (root, query, criteriaBuilder) -> {

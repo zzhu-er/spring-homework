@@ -22,4 +22,9 @@ public class EmailFallback implements EmailClient {
   public ResponseEntity<String> saveEmail(Long userId, List<Email> savedEmails) {
     throw new RuntimeException("Email Service Not Working");
   }
+
+  @Override
+  public ResponseEntity<String> deleteEmail(Long id) {
+    throw new RuntimeException("Email Service Not Working");
+  }
 }
