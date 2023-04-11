@@ -2,6 +2,7 @@ package com.example.springhomework.service;
 
 import com.example.springhomework.dto.Email;
 import com.example.springhomework.dto.UserRequest;
+import com.example.springhomework.dto.UserResponse;
 import com.example.springhomework.model.User;
 import com.example.springhomework.repository.UserRepository;
 import java.time.Instant;
@@ -47,17 +48,24 @@ public class UserService {
     return emailClient.getById(id);
   }
 
-  public List<User> findAllDynamically(Long age, String name, Instant startDate, Instant endDate) {
+  public UserResponse findAllDynamically(Long age, String name, Instant startDate, Instant endDate) {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
-    return userRepository.findAll(specification);
+    List<User> result = userRepository.findAll(specification);
+    UserResponse userResponse = new UserResponse();
+    userResponse.setContent(result);
+    return userResponse;
   }
 
-  public List<User> findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
+  public UserResponse findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
       String name, Instant startDate, Instant endDate) {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     Pageable pagination = PageRequest.of(page, size);
     Page<User> allUsers = userRepository.findAll(specification, pagination);
-    return allUsers.getContent();
+    UserResponse userResponse = new UserResponse();
+    userResponse.setContent(allUsers.getContent());
+    userResponse.setTotalPages(allUsers.getTotalPages());
+    userResponse.setTotalElements(allUsers.getTotalElements());
+    return userResponse;
   }
 
   public Optional<User> getUserById(Long id) {
