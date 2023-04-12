@@ -1,6 +1,7 @@
 package com.example.springhomework.controller;
 
 import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.PageResponse;
 import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.dto.UserResponse;
 import com.example.springhomework.model.User;
@@ -11,7 +12,6 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +35,7 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public ResponseEntity<UserResponse> queryAllDynamically(@RequestParam(required = false) Integer page,
+  public ResponseEntity<PageResponse<UserResponse>> queryAllDynamically(@RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer size,
       @RequestParam(required = false) Long age,
       @RequestParam(required = false) String name,
@@ -43,16 +43,16 @@ public class UserController {
       @DateTimeFormat(iso = ISO.DATE_TIME) Instant startDate,
       @RequestParam(value = "to", required = false)
       @DateTimeFormat(iso = ISO.DATE_TIME) Instant endDate) {
-    if (page == null || size == null) {
-      UserResponse userResponse = userService.findAllDynamically(age, name, startDate, endDate);
-      return new ResponseEntity<>(userResponse, HttpStatus.OK);
-    }
-    UserResponse userResponse = userService.findAllDynamicallyWithPagination(page,
+//    if (page == null || size == null) {
+//      UserResponse userResponse = userService.findAllDynamically(age, name, startDate, endDate);
+//      return new ResponseEntity<>(userResponse, HttpStatus.OK);
+//    }
+    PageResponse<UserResponse> userResponse = userService.findAllDynamicallyWithPagination(page,
         size, age, name, startDate, endDate);
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.set("Page-Count", String.valueOf(userResponse.getTotalPages()));
-    responseHeaders.set("Total-Count", String.valueOf(userResponse.getTotalElements()));
-    return new ResponseEntity<>(userResponse, responseHeaders, HttpStatus.OK);
+//    HttpHeaders responseHeaders = new HttpHeaders();
+//    responseHeaders.set("Page-Count", String.valueOf(userResponse.getTotalPages()));
+//    responseHeaders.set("Total-Count", String.valueOf(userResponse.getTotalElements()));
+    return ResponseEntity.ok(userResponse);
   }
 
   @PostMapping

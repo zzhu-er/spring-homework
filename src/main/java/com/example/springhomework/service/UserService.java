@@ -1,6 +1,7 @@
 package com.example.springhomework.service;
 
 import com.example.springhomework.dto.Email;
+import com.example.springhomework.dto.PageResponse;
 import com.example.springhomework.dto.UserRequest;
 import com.example.springhomework.dto.UserResponse;
 import com.example.springhomework.model.User;
@@ -56,16 +57,25 @@ public class UserService {
     return userResponse;
   }
 
-  public UserResponse findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
+  public PageResponse<UserResponse> findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
       String name, Instant startDate, Instant endDate) {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
-    Pageable pagination = PageRequest.of(page, size);
-    Page<User> allUsers = userRepository.findAll(specification, pagination);
+    PageResponse<UserResponse> pageResponse = new PageResponse<>();
     UserResponse userResponse = new UserResponse();
-    userResponse.setContent(allUsers.getContent());
-    userResponse.setTotalPages(allUsers.getTotalPages());
-    userResponse.setTotalElements(allUsers.getTotalElements());
-    return userResponse;
+    pageResponse.setContent(userResponse);
+    if (page != null && size != null) {
+      Pageable pagination = PageRequest.of(page, size);
+      Page<User> userPages = userRepository.findAll(specification, pagination);
+      userResponse.setContent(userPages.getContent());
+      pageResponse.setTotalPages(userPages.getTotalPages());
+      pageResponse.setTotalElements(userPages.getTotalElements());
+      pageResponse.setCurrentPage(userPages.getNumber());
+    }
+    else {
+      List<User> allUsers = userRepository.findAll(specification);
+      userResponse.setContent(allUsers);
+    }
+    return pageResponse;
   }
 
   public Optional<User> getUserById(Long id) {
@@ -89,7 +99,8 @@ public class UserService {
         predicateList.add(agePredicate);
       }
       if (name != null) {
-        Predicate namePredicate = criteriaBuilder.equal(root.get("name"), name);
+//        Predicate namePredicate = criteriaBuilder.equal(root.get("name"), name);
+        Predicate namePredicate = criteriaBuilder.like(root.get("name"), "%" + name + "%");
         predicateList.add(namePredicate);
       }
       if (startDate != null) {

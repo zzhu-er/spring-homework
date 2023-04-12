@@ -1,7 +1,5 @@
 package com.example.springhomework.dto;
 
-import com.example.springhomework.model.User;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class PageResponse<T> {
 
-  private List<User> content;
+  private T content;
+  private int totalPages;
+  private Long totalElements;
+  private int currentPage;
 }
