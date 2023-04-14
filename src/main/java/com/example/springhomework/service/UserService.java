@@ -50,23 +50,17 @@ public class UserService {
   }
 
   public PageResponse<UserResponse> findAllDynamicallyWithPagination(Integer page, Integer size,
-      Long age,
-      String name, Instant startDate, Instant endDate) {
+      Long age, String name, Instant startDate, Instant endDate) {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     PageResponse<UserResponse> pageResponse = new PageResponse<>();
     UserResponse userResponse = new UserResponse();
     pageResponse.setContent(userResponse);
-    if (page != null && size != null) {
-      Pageable pagination = PageRequest.of(page, size);
-      Page<User> userPages = userRepository.findAll(specification, pagination);
-      userResponse.setContent(userPages.getContent());
-      pageResponse.setTotalPages(userPages.getTotalPages());
-      pageResponse.setTotalElements(userPages.getTotalElements());
-      pageResponse.setCurrentPage(userPages.getNumber());
-    } else {
-      List<User> allUsers = userRepository.findAll(specification);
-      userResponse.setContent(allUsers);
-    }
+    Pageable pagination = PageRequest.of(page, size);
+    Page<User> userPages = userRepository.findAll(specification, pagination);
+    userResponse.setContent(userPages.getContent());
+    pageResponse.setTotalPages(userPages.getTotalPages());
+    pageResponse.setTotalElements(userPages.getTotalElements());
+    pageResponse.setCurrentPage(userPages.getNumber());
     return pageResponse;
   }
 
