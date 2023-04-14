@@ -35,7 +35,8 @@ public class UserController {
   private UserService userService;
 
   @GetMapping
-  public ResponseEntity<PageResponse<UserResponse>> queryAllDynamically(@RequestParam(required = false) Integer page,
+  public ResponseEntity<PageResponse<UserResponse>> queryAllDynamically(
+      @RequestParam(required = false) Integer page,
       @RequestParam(required = false) Integer size,
       @RequestParam(required = false) Long age,
       @RequestParam(required = false) String name,
@@ -43,15 +44,8 @@ public class UserController {
       @DateTimeFormat(iso = ISO.DATE_TIME) Instant startDate,
       @RequestParam(value = "to", required = false)
       @DateTimeFormat(iso = ISO.DATE_TIME) Instant endDate) {
-//    if (page == null || size == null) {
-//      UserResponse userResponse = userService.findAllDynamically(age, name, startDate, endDate);
-//      return new ResponseEntity<>(userResponse, HttpStatus.OK);
-//    }
     PageResponse<UserResponse> userResponse = userService.findAllDynamicallyWithPagination(page,
         size, age, name, startDate, endDate);
-//    HttpHeaders responseHeaders = new HttpHeaders();
-//    responseHeaders.set("Page-Count", String.valueOf(userResponse.getTotalPages()));
-//    responseHeaders.set("Total-Count", String.valueOf(userResponse.getTotalElements()));
     return ResponseEntity.ok(userResponse);
   }
 
@@ -97,7 +91,8 @@ public class UserController {
   }
 
   @PostMapping("/{id}/emails")
-  public ResponseEntity<String> saveEmailsUnderUser(@PathVariable Long id, @RequestBody List<Email> emailList)
+  public ResponseEntity<String> saveEmailsUnderUser(@PathVariable Long id,
+      @RequestBody List<Email> emailList)
       throws Exception {
     userService.saveEmailUnderUser(id, emailList);
     return new ResponseEntity<>(HttpStatus.CREATED);

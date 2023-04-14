@@ -24,6 +24,7 @@ public interface EmailClient {
   @PostMapping("/{userId}")
   ResponseEntity<String> saveEmail(@PathVariable Long userId, @RequestBody List<Email> savedEmails)
       throws Exception;
+
   @DeleteMapping("/{id}")
   ResponseEntity<String> deleteEmail(@PathVariable Long id) throws Exception;
 }

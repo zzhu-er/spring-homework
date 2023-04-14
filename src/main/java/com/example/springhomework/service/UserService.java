@@ -49,15 +49,8 @@ public class UserService {
     return emailClient.getById(id);
   }
 
-  public UserResponse findAllDynamically(Long age, String name, Instant startDate, Instant endDate) {
-    Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
-    List<User> result = userRepository.findAll(specification);
-    UserResponse userResponse = new UserResponse();
-    userResponse.setContent(result);
-    return userResponse;
-  }
-
-  public PageResponse<UserResponse> findAllDynamicallyWithPagination(Integer page, Integer size, Long age,
+  public PageResponse<UserResponse> findAllDynamicallyWithPagination(Integer page, Integer size,
+      Long age,
       String name, Instant startDate, Instant endDate) {
     Specification<User> specification = getUserSpecification(age, name, startDate, endDate);
     PageResponse<UserResponse> pageResponse = new PageResponse<>();
@@ -70,8 +63,7 @@ public class UserService {
       pageResponse.setTotalPages(userPages.getTotalPages());
       pageResponse.setTotalElements(userPages.getTotalElements());
       pageResponse.setCurrentPage(userPages.getNumber());
-    }
-    else {
+    } else {
       List<User> allUsers = userRepository.findAll(specification);
       userResponse.setContent(allUsers);
     }
@@ -99,7 +91,6 @@ public class UserService {
         predicateList.add(agePredicate);
       }
       if (name != null) {
-//        Predicate namePredicate = criteriaBuilder.equal(root.get("name"), name);
         Predicate namePredicate = criteriaBuilder.like(root.get("name"), "%" + name + "%");
         predicateList.add(namePredicate);
       }
