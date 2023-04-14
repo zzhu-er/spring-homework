@@ -51,7 +51,8 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<String> save(@RequestBody UserRequest userRequest) throws Exception {
-    return userService.save(userRequest);
+    userService.save(userRequest);
+    return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")

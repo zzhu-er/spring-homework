@@ -29,12 +29,11 @@ public class UserService {
   private EmailClient emailClient;
 
   @Transactional
-  public ResponseEntity<String> save(UserRequest userRequest) throws Exception {
+  public void save(UserRequest userRequest) throws Exception {
     User user = User.builder().name(userRequest.getName()).age(userRequest.getAge()).build();
     List<Email> savedEmails = userRequest.getEmails();
     User savedUser = userRepository.save(user);
     emailClient.saveEmail(savedUser.getId(), savedEmails);
-    return new ResponseEntity<>("USER SAVED SUCCESSFULLY", HttpStatus.CREATED);
   }
 
   public void delete(User deletedUser) {
