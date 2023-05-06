@@ -23,7 +23,7 @@ class UserServiceIntegrationTest {
   @Autowired
   private UserRepository userRepository;
   private final EmailClient emailClient = Mockito.mock(EmailClient.class);
-  private UserService userService;
+  private UserService subject;
 
   @BeforeEach
   void setUp() {
@@ -39,7 +39,7 @@ class UserServiceIntegrationTest {
         User.builder().age(18L).name("B").build()
     );
     userRepository.saveAll(userList);
-    userService = new UserService(userRepository, emailClient);
+    subject = new UserService(userRepository, emailClient);
   }
 
   @Test
@@ -50,7 +50,8 @@ class UserServiceIntegrationTest {
     Integer page = 0;
     Integer size = 10;
     //when
-    PageResponse<UserResponse> result = userService.findAllDynamicallyWithPagination(page, size, age, name, null, null);
+    PageResponse<UserResponse> result = subject.findAllDynamicallyWithPagination(page, size,
+        age, name, null, null);
     //then
     UserResponse subResponse = result.getContent();
     Condition<User> eighteen = new Condition<>(user -> user.getAge() == 18L, "age 18");
@@ -62,41 +63,46 @@ class UserServiceIntegrationTest {
     Assertions.assertThat(result.getCurrentPage()).isEqualTo(0);
   }
 
-//  @Test
-//  void shouldGetEmptyUserWhoseCreateDateIsAfterTomorrow() {
-//    //given
-//    Instant tomorrow = Instant.now().plusSeconds(24 * 60 * 60);
-//    //when
-//    List<User> result = userService.findAllDynamically(null, null, tomorrow, null);
-//    //then
-//    Assertions.assertThat(result).isEmpty();
-//  }
-//
-//  @Test
-//  void shouldGetEmptyUserWhoseCreateDateIsBeforeYesterday() {
-//    //given
-//    Instant yesterday = Instant.now().minusSeconds(24 * 60 * 60);
-//    //when
-//    List<User> result = userService.findAllDynamically(null, null, null, yesterday);
-//    //then
-//    Assertions.assertThat(result).isEmpty();
-//  }
-//
-//  @Test
-//  void shouldGetUsersWhoseIdsAreTwoAndSixInFirstPageWithFilteringByNameAndAge() {
-//    //given
-//    String name = "A";
-//    Long age = 19L;
-//    int page = 0;
-//    int size = 2;
-//    Instant yesterday = Instant.now().minusSeconds(24 * 60 * 60);
-//    Instant tomorrow = Instant.now().plusSeconds(24 * 60 * 60);
-//    //when
-//    List<User> result = userService.findAllDynamicallyWithPagination(page, size, age, name,
-//        yesterday, tomorrow);
-//    //then
-//    Assertions.assertThat(result).hasSize(2);
-//    Assertions.assertThat(result.get(0).getId()).isEqualTo(2);
-//    Assertions.assertThat(result.get(1).getId()).isEqualTo(6);
-//  }
+  @Test
+  void shouldGetEmptyUserWhoseCreateDateIsAfterTomorrow() {
+    //given
+    Instant tomorrow = Instant.now().plusSeconds(24 * 60 * 60);
+    //when
+    PageResponse<UserResponse> result = subject.findAllDynamicallyWithPagination(0, 5, null,
+        null, tomorrow, null);
+    //then
+    Assertions.assertThat(result.getTotalElements()).isEqualTo(0);
+  }
+
+  @Test
+  void shouldGetEmptyUserWhoseCreateDateIsBeforeYesterday() {
+    //given
+    Instant yesterday = Instant.now().minusSeconds(24 * 60 * 60);
+    //when
+    PageResponse<UserResponse> result = subject.findAllDynamicallyWithPagination(
+        0, 5, null, null, null, yesterday);
+    //then
+    Assertions.assertThat(result.getTotalElements()).isEqualTo(0);
+  }
+
+  @Test
+  void shouldGetUsersWhoseIdsAreTwoAndSixInFirstPageWithFilteringByNameAndAge() {
+    //given
+    String name = "A";
+    Long age = 19L;
+    int page = 0;
+    int size = 2;
+    Instant yesterday = Instant.now().minusSeconds(24 * 60 * 60);
+    Instant tomorrow = Instant.now().plusSeconds(24 * 60 * 60);
+    //when
+    PageResponse<UserResponse> result = subject.findAllDynamicallyWithPagination(
+        page, size, age, name, yesterday, tomorrow);
+    List<User> userContent = result.getContent().getContent();
+    //then
+    Assertions.assertThat(result.getTotalPages()).isEqualTo(1);
+    Assertions.assertThat(result.getCurrentPage()).isEqualTo(0);
+    Assertions.assertThat(result.getTotalElements()).isEqualTo(2);
+    Assertions.assertThat(userContent.get(0).getId()).isEqualTo(2);
+    Assertions.assertThat(userContent.get(1).getId()).isEqualTo(6);
+  }
 }
